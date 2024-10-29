@@ -16,7 +16,10 @@
 
     <ui:SimpleStackPanel>
         <TextBlock Text="検索対象ファイル" Margin="10,10,10,0" Style="{StaticResource SubtitleTextBlockStyle}"/>
-        <CheckBox Content="CSVファイルで指定" IsChecked="{Binding IsUseFileListCsv}" Margin="10,5,0,5"/>
+        <ComboBox Margin="10,5,0,5"
+          ItemsSource="{Binding TargetFileSelectionTypes}"
+          SelectedItem="{Binding SelectedTargetFileSelectionType, Mode=TwoWay}" />
+        
         <WrapPanel>
             <TextBox Text="{Binding FindFolderPath}" Margin="10,10,0,10" Width="500" />
             <Button Content="{Binding OpenSelectPathButtonContent}" Command="{Binding SelectPathCommand, Mode=OneWay}" Margin="1,10,10,10" Width="150"/>
