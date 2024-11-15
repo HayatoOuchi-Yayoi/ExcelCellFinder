@@ -19,7 +19,8 @@ namespace ExcelCellFinder.Desktop.ViewModels.Pages
         public SetupConditionPageViewModel()
         {
             PageTitle = "条件設定";
-            _findFolderPath = "";
+            FindFolderPath = "";
+            SelectedTargetFileSelectionType = TargetFileSelectionType.フォルダを指定;
         }
 
         private static readonly string BUTTON_CONTENT_CSV = "CSVファイルを選択";
