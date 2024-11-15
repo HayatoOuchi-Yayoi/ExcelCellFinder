@@ -1,9 +1,6 @@
 ﻿namespace ExcelCellFinder.Core.Exceptions
 {
-    internal class NotOperatableCellException : Exception
+    internal class NotOperatableCellException(string message) : Exception(message)
     {
-        public NotOperatableCellException(string message) : base(message)
-        {
-        }
     }
 }
