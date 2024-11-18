@@ -8,6 +8,8 @@ Excelファイル内のセルを検索するツールです。
 - Visual Studio 2022
 ## ビルド
 Visaul Studio でRelease構成でビルドしてください。
+## インストール
+Release/release.zipを解凍して、任意のフォルダに配置してください。
 ## 使い方
 ExcelCellFinder.Desktop.exeを実行します。
 
