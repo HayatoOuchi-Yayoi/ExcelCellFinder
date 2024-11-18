@@ -38,4 +38,29 @@
     </None>
   </ItemGroup>
 
+	<ItemGroup>
+		<FluentValidationExcludedCultures 
+			Include="af-ZA;am-ET;ar-SA;az-Latn-AZ;be-BY;bg-BG;bn-BD;bs-Latn-BA;ca-ES;cs-CZ;da-DK;de-DE;el-GR;en-GB;es-ES;es-MX;et-EE;eu-ES;fa-IR;fi-FI;fr-CA;fr-FR;gl-ES;he-IL;hi-IN;hr-HR;hu-HU;id-ID;is-IS;it-IT;ka-GE;kk-KZ;km-KH;kn-IN;ko-KR;lo-LA;lt-LT;lv-LV;mk-MK;ml-IN;ms-MY;nb-NO;nl-NL;nn-NO;pl-PL;pt-BR;pt-PT;ro-RO;ru-RU;sk-SK;sl-SI;sq-AL;sr-Latn-RS;sv-SE;sw-KE;ta-IN;te-IN;th-TH;tr-TR;uk-UA;uz-Latn-UZ;vi-VN;">
+			<InProject>false</InProject>
+		</FluentValidationExcludedCultures>
+	</ItemGroup>
+
+	<Target Name="RemoveTranslationsAfterBuild" AfterTargets="AfterBuild">
+		<RemoveDir Directories="@(FluentValidationExcludedCultures->'$(OutputPath)%(Filename)')" />
+	</Target>
+
+	<Target Name="AfterBuildCustom" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+		<Message Text="=== CustomAfterBuild Process started ===" Importance="high" />
+		<PropertyGroup>
+			<OutputDir>$(SolutionDir)Release</OutputDir>
+			<ZipFile>$(OutputDir)\release.zip</ZipFile>
+		</PropertyGroup>
+		<Exec Command="powershell -Command &quot; if (Test-Path $(OutputDir)) { Remove-Item -Path $(OutputDir) -Recurse -Force } &quot;" />
+		<Exec Command="powershell -Command &quot; New-Item -ItemType Directory -Force -Path $(OutputDir) &quot;" />         
+		<Message Text="Directory created: $(OutputDir)" Importance="high" />
+		<Exec Command="powershell -Command &quot;Compress-Archive -Path '$(OutputPath)*' -DestinationPath '$(ZipFile)'&quot;" />
+		<Message Text="Zip file created at: $(ZipFile)" Importance="high" />
+		<Message Text="=== AfterBuild completed ===" Importance="high" />
+	</Target>
+
 </Project>
