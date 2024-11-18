@@ -70,7 +70,8 @@ namespace ExcelCellFinder.Core.Logic.FindCell
 
             return result;
         }
-        public IEnumerable<(IXLCell, Exception?)> GetCellsWithRedFontOrStrikethrough(IXLWorksheet worksheet)
+
+        private List<(IXLCell, Exception?)> GetCellsWithRedFontOrStrikethrough(IXLWorksheet worksheet)
         {
             var cells = new List<(IXLCell, Exception?)>();
             var notOperatableCellAddresses = new List<IXLAddress>();
