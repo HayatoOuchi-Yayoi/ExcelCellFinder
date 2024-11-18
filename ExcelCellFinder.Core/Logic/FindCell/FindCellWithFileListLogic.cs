@@ -8,7 +8,7 @@ namespace ExcelCellFinder.Core.Logic.FindCell
 {
     internal class FindCellWithFileListLogic : IFindCellLogic
     {
-        private IFindCellOptions _originalOption;
+        private readonly IFindCellOptions _originalOption;
 
         public ILogger Logger { get; set; }
 
@@ -21,7 +21,7 @@ namespace ExcelCellFinder.Core.Logic.FindCell
 
             if (options.TargetFileInfos == null)
             {
-                throw new ArgumentNullException(nameof(options.TargetFileInfos));
+                throw new ArgumentException("TargetFileInfos must not be null.");
             }
 
             this._originalOption = options;

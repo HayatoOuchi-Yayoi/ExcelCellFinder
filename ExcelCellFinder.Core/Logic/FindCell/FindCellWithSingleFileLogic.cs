@@ -9,8 +9,8 @@ namespace ExcelCellFinder.Core.Logic.FindCell
 {
     internal class FindCellWithSingleFileLogic : IFindCellLogic
     {
-        private IFindCellOptions _originalOptions;
-        private string _path;
+        private readonly IFindCellOptions _originalOptions;
+        private readonly string _path;
 
         public ILogger Logger { get; set; }
 
@@ -23,7 +23,7 @@ namespace ExcelCellFinder.Core.Logic.FindCell
 
             if (options.TargetFileInfo == null)
             {
-                throw new ArgumentNullException(nameof(options.TargetFileInfo));
+                throw new ArgumentException("TargetFileInfos must not be null.");
             }
 
             this._originalOptions = options;
@@ -36,57 +36,56 @@ namespace ExcelCellFinder.Core.Logic.FindCell
         {
             // Excelファイルを開く
             using var fs = new FileStream(this._path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            using (var workbook = new XLWorkbook(fs))
+            using var workbook = new XLWorkbook(fs);
+            Logger.LogInformation("Open Excel File: {FilePath}", this._path);
+
+            workbook.CalculateMode = XLCalculateMode.Manual;
+
+            var foundCells = new List<(IXLCell, Exception?)>();
+            foreach (var sheet in workbook.Worksheets.Where(x => x.Visibility == XLWorksheetVisibility.Visible))
             {
-                Logger.LogInformation($"Open Excel File: {this._path}");
+                Logger.LogInformation("Open Excel Sheet: {SheetName}", sheet.Name);
 
-                workbook.CalculateMode = XLCalculateMode.Manual;
-
-                var foundCells = new List<(IXLCell, Exception?)>();
-                foreach (var sheet in workbook.Worksheets.Where(x => x.Visibility == XLWorksheetVisibility.Visible))
+                if (this._originalOptions.TargetCellTypes.Contains(TargetCellType.RedColor)
+                    && this._originalOptions.TargetCellTypes.Contains(TargetCellType.StrikeLine))
                 {
-                    Logger.LogInformation($"Open Excel Sheet: {sheet.Name}");
-
-                    if (this._originalOptions.TargetCellTypes.Contains(TargetCellType.RedColor)
-                        && this._originalOptions.TargetCellTypes.Contains(TargetCellType.StrikeLine))
-                    {
-                        foundCells.AddRange(GetCellsWithRedFontOrStrikethrough(sheet));
-                    }
+                    foundCells.AddRange(GetCellsWithRedFontOrStrikethrough(sheet));
                 }
-
-                IResult result = new FindCellResult(_originalOptions, false);
-                result.ProcessedFiles.Add(new ResultFile(new FileInfo(this._path))
-                {
-                    FoundCells = foundCells.Select(cell =>
-                    {
-                        if (cell.Item2 != null)
-                        {
-                            return new FoundCell(cell.Item1, cell.Item2);
-                        }
-
-                        return (IFoundCell)new FoundCell(cell.Item1);
-
-                    }).ToList()
-                });
-
-                return result;
             }
+
+            IResult result = new FindCellResult(_originalOptions, false);
+            result.ProcessedFiles.Add(new ResultFile(new FileInfo(this._path))
+            {
+                FoundCells = foundCells.Select(cell =>
+                {
+                    if (cell.Item2 != null)
+                    {
+                        return new FoundCell(cell.Item1, cell.Item2);
+                    }
+
+                    return (IFoundCell)new FoundCell(cell.Item1);
+
+                }).ToList()
+            });
+
+            return result;
         }
         public IEnumerable<(IXLCell, Exception?)> GetCellsWithRedFontOrStrikethrough(IXLWorksheet worksheet)
         {
             var cells = new List<(IXLCell, Exception?)>();
             var notOperatableCellAddresses = new List<IXLAddress>();
 
-            Logger.LogInformation($"Used Cell Count: {worksheet.CellsUsed().Count()}");
+            Logger.LogInformation("Used Cell Count: {CellCount}", worksheet.CellsUsed().Count());
 
             foreach (IXLCell cell in worksheet.CellsUsed())
             {
+
+                Logger.LogDebug("Cell: {CellAddress}", cell.Address.ToString());
+
                 if (cell.HasRichText == false) continue;
 
                 try
                 {
-                    Logger.LogDebug(cell.Address.ToString());
-
                     if (IsOperatableCell(cell, notOperatableCellAddresses) == false)
                     {
                         notOperatableCellAddresses.Add(cell.Address);
