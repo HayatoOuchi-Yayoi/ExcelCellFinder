@@ -7,6 +7,9 @@ using Microsoft.Extensions.Logging;
 
 namespace ExcelCellFinder.Core.Logic.FindCell
 {
+    /// <summary>
+    /// セル検索ロジック
+    /// </summary>
     internal class FindCellWithSingleFileLogic : IFindCellLogic
     {
         private readonly IFindCellOptions _originalOptions;
@@ -14,6 +17,13 @@ namespace ExcelCellFinder.Core.Logic.FindCell
 
         private readonly ILogger _logger;
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="options">検索オプション</param>
+        /// <param name="logger">ロガーインスタンス</param>
+        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="ArgumentException"></exception>
         internal FindCellWithSingleFileLogic(IFindCellOptions options, ILogger logger)
         {
             if (options.Mode != TargetMode.File)
@@ -32,6 +42,10 @@ namespace ExcelCellFinder.Core.Logic.FindCell
             _logger = logger;
         }
 
+        /// <summary>
+        /// セル検索処理
+        /// </summary>
+        /// <returns>検索結果</returns>
         public IResult FindCell()
         {
             // Excelファイルを開く

@@ -5,10 +5,13 @@ using System.Windows;
 namespace ExcelCellFinder.Desktop.Views
 {
     /// <summary>
-    /// MainWindow.xaml の相互作用ロジック
+    /// メインウィンドウのコードビハインド
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();

@@ -4,10 +4,17 @@ using System.IO;
 
 namespace ExcelCellFinder.Desktop.Services.SaveResult
 {
+    /// <summary>
+    /// セル検索結果保存サービス
+    /// </summary>
     internal class SaveResultExcelService : ISaveResultService
     {
         public string? SaveFilePath { get; set; }
 
+        /// <summary>
+        /// セル検索結果を保存する
+        /// </summary>
+        /// <param name="saveData">保存データ</param>
         public void SaveResult(IResult saveData)
         {
             if (string.IsNullOrEmpty(SaveFilePath))
