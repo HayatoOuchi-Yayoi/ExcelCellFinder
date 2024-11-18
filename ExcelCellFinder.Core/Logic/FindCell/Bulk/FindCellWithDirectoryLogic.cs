@@ -14,7 +14,7 @@ namespace ExcelCellFinder.Core.Logic.FindCell.Bulk
 
         private readonly IFindCellOptions _originalOption;
 
-        public ILogger Logger { get; set; }
+        private readonly ILogger _logger;
 
         internal FindCellWithDirectoryLogic(IFindCellOptions options, ILogger logger)
         {
@@ -33,7 +33,7 @@ namespace ExcelCellFinder.Core.Logic.FindCell.Bulk
             _excludeDirectoryRegex = options.ExcludeDirectoryRegex;
             _originalOption = options;
 
-            Logger = logger;
+            _logger = logger;
         }
 
         public IResult FindCell()
@@ -54,7 +54,7 @@ namespace ExcelCellFinder.Core.Logic.FindCell.Bulk
             option.TargetFileInfos = files;
             option.TargetCellTypes = _originalOption.TargetCellTypes;
 
-            var logic = FindCellLogicFactory.GetLogic(option, Logger);
+            var logic = FindCellLogicFactory.GetLogic(option, _logger);
 
             return logic.FindCell();
 

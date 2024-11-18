@@ -10,7 +10,7 @@ namespace ExcelCellFinder.Core.Logic.FindCell.Bulk
     {
         private readonly IFindCellOptions _originalOption;
 
-        public ILogger Logger { get; set; }
+        private readonly ILogger _logger;
 
         internal FindCellWithFileListLogic(IFindCellOptions options, ILogger logger)
         {
@@ -25,7 +25,7 @@ namespace ExcelCellFinder.Core.Logic.FindCell.Bulk
             }
 
             _originalOption = options;
-            Logger = logger;
+            _logger = logger;
         }
 
         public IResult FindCell()
@@ -47,7 +47,7 @@ namespace ExcelCellFinder.Core.Logic.FindCell.Bulk
             foreach (var file in files)
             {
                 optionForFindCellInFile.TargetFileInfo = file;
-                var logic = FindCellLogicFactory.GetLogic(optionForFindCellInFile, Logger);
+                var logic = FindCellLogicFactory.GetLogic(optionForFindCellInFile, _logger);
                 var findResult = logic.FindCell();
 
                 wholeResult = wholeResult.Merge(findResult);
