@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ExcelCellFinder.Core.Result.Interface;
+﻿using ExcelCellFinder.Core.Result.Interface;
 
 namespace ExcelCellFinder.Core.Result
 {

@@ -14,9 +14,9 @@ namespace ExcelCellFinder.Desktop.ViewModels.Pages
 {
     public partial class FindResultPageViewModel : PageViewModelBase
     {
-        private SetupConditionPageViewModel _originViewModel;
+        private readonly SetupConditionPageViewModel _originViewModel;
 
-        private IResult _findCellResult;
+        private readonly IResult _findCellResult;
 
         [ObservableProperty]
         private ObservableCollection<FindResultGridItem> _findResultGridData;

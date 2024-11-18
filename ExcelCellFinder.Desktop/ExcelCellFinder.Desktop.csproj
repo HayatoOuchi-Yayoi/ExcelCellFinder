@@ -6,6 +6,12 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+
+    <Product>ExcelCellFinder</Product>
+    <Version>1.0.0</Version>
+    <FileVersion>1.0.0</FileVersion>
+    <Description>Excelファイル内のセルを検索するツールです</Description>
+    <Copyright>Copyright (c) 2024 Yayoi Co., Ltd.</Copyright>
     <ApplicationIcon>ExcelCellFinder.ico</ApplicationIcon>
   </PropertyGroup>
 

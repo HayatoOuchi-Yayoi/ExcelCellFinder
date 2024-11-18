@@ -1,10 +1,5 @@
 ﻿using ExcelCellFinder.Desktop.ViewModels;
 using ExcelCellFinder.Desktop.ViewModels.Pages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExcelCellFinder.Desktop.Services
 {
@@ -23,7 +18,7 @@ namespace ExcelCellFinder.Desktop.Services
 
         public MainWindowViewModel Main { get; private set; }
 
-        private RoutingService(MainWindowViewModel vm) 
+        private RoutingService(MainWindowViewModel vm)
         {
             Main = vm;
         }

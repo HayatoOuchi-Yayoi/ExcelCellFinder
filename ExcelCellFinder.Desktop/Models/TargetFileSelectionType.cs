@@ -2,8 +2,8 @@
 {
     public enum TargetFileSelectionType
     {
-        CSVファイルで指定,
         フォルダを指定,
-        ファイルを指定
+        ファイルを指定,
+        CSVファイルで指定,
     }
 }

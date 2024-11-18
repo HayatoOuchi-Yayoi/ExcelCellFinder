@@ -12,7 +12,7 @@ namespace ExcelCellFinder.Desktop
     {
         internal static ILogger Logger { get; private set; }
 
-        public App()
+        static App()
         {
             var loggerFactory = LoggerFactory.Create(builder =>
             {
@@ -20,7 +20,10 @@ namespace ExcelCellFinder.Desktop
             });
 
             Logger = loggerFactory.CreateLogger<App>();
+        }
 
+        public App()
+        {
             Logger.LogInformation("Application started.");
         }
     }

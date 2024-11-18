@@ -8,11 +8,11 @@ namespace ExcelCellFinder.Core.Logic.FindCell.Bulk
 {
     internal class FindCellWithDirectoryLogic : IFindCellLogic
     {
-        private string _path;
-        private bool _isRecursively;
-        private Regex? _excludeDirectoryRegex;
+        private readonly string _path;
+        private readonly bool _isRecursively;
+        private readonly Regex? _excludeDirectoryRegex;
 
-        private IFindCellOptions _originalOption;
+        private readonly IFindCellOptions _originalOption;
 
         public ILogger Logger { get; set; }
 
@@ -25,7 +25,7 @@ namespace ExcelCellFinder.Core.Logic.FindCell.Bulk
 
             if (options.TargetDirectoryInfo == null)
             {
-                throw new ArgumentNullException(nameof(options.TargetDirectoryInfo));
+                throw new ArgumentException("TargetDirectoryInfo must not be null.");
             }
 
             _path = options.TargetDirectoryInfo.FullName;
