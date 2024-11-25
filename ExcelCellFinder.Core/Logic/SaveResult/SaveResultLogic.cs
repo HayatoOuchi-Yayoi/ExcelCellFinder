@@ -3,11 +3,19 @@ using ExcelCellFinder.Core.Result.Interface;
 
 namespace ExcelCellFinder.Core.Logic.SaveResult
 {
+    /// <summary>
+    /// 検索結果保存ロジック
+    /// </summary>
     internal class SaveResultLogic : ISaveResultLogic
     {
         private static readonly int START_ROW = 2;
         private static readonly string TEMPLATE_WORKBOOK_PATH = "result_template.xlsm";
 
+        /// <summary>
+        /// 検索結果を保存する
+        /// </summary>
+        /// <param name="result">検索結果</param>
+        /// <param name="saveTo">保存先ファイル</param>
         public void SaveResult(IResult result, FileInfo saveTo)
         {
             if (saveTo.Exists)

@@ -6,6 +6,9 @@ using System.Text.RegularExpressions;
 
 namespace ExcelCellFinder.Core.Logic.FindCell.Bulk
 {
+    /// <summary>
+    /// フォルダ指定セル検索ロジック
+    /// </summary>
     internal class FindCellWithDirectoryLogic : IFindCellLogic
     {
         private readonly string _path;
@@ -14,8 +17,15 @@ namespace ExcelCellFinder.Core.Logic.FindCell.Bulk
 
         private readonly IFindCellOptions _originalOption;
 
-        public ILogger Logger { get; set; }
+        private readonly ILogger _logger;
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="options">検索オプション</param>
+        /// <param name="logger">ロガーインスタンス</param>
+        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="ArgumentException"></exception>
         internal FindCellWithDirectoryLogic(IFindCellOptions options, ILogger logger)
         {
             if (options.Mode != TargetMode.Directory)
@@ -33,9 +43,13 @@ namespace ExcelCellFinder.Core.Logic.FindCell.Bulk
             _excludeDirectoryRegex = options.ExcludeDirectoryRegex;
             _originalOption = options;
 
-            Logger = logger;
+            _logger = logger;
         }
 
+        /// <summary>
+        /// セル検索処理
+        /// </summary>
+        /// <returns>検索結果</returns>
         public IResult FindCell()
         {
             var processDirectory = new DirectoryInfo(_path);
@@ -54,7 +68,7 @@ namespace ExcelCellFinder.Core.Logic.FindCell.Bulk
             option.TargetFileInfos = files;
             option.TargetCellTypes = _originalOption.TargetCellTypes;
 
-            var logic = FindCellLogicFactory.GetLogic(option, Logger);
+            var logic = FindCellLogicFactory.GetLogic(option, _logger);
 
             return logic.FindCell();
 

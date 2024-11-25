@@ -3,8 +3,16 @@ using ExcelCellFinder.Core.Result.Interface;
 
 namespace ExcelCellFinder.Core.Result
 {
+    /// <summary>
+    /// セル検索結果クラス
+    /// </summary>
     internal class FindCellResult : IResult
     {
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="executedOption">実行した検索オプション</param>
+        /// <param name="isError">エラーフラグ</param>
         internal FindCellResult(IFindCellOptions executedOption, bool isError)
         {
             ExecutedOptions = executedOption;
