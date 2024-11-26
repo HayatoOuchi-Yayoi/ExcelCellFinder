@@ -12,7 +12,12 @@
     <FileVersion>1.0.0</FileVersion>
     <Description>Excelファイル内のセルを検索するツールです</Description>
     <Copyright>Copyright (c) 2024 Yayoi Co., Ltd.</Copyright>
+    <ApplicationIcon>ExcelCellFinder.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="ExcelCellFinder.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />

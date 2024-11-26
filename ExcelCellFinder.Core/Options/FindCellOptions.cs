@@ -3,6 +3,10 @@ using System.Text.RegularExpressions;
 
 namespace ExcelCellFinder.Core.Options
 {
+    /// <summary>
+    /// セル検索オプション
+    /// </summary>
+    /// <remarks>プロパティは<see cref="ExcelCellFinder.Core.Options.Interface.IFindCellOptions"/></remarks>
     internal class FindCellOptions : IFindCellOptions
     {
         public FileInfo? TargetFileInfo { get; set; }

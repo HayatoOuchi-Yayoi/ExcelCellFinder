@@ -6,12 +6,22 @@ using Microsoft.Extensions.Logging;
 
 namespace ExcelCellFinder.Core.Logic.FindCell.Bulk
 {
+    /// <summary>
+    /// ファイルリスト指定セル検索ロジック
+    /// </summary>
     internal class FindCellWithFileListLogic : IFindCellLogic
     {
         private readonly IFindCellOptions _originalOption;
 
-        public ILogger Logger { get; set; }
+        private readonly ILogger _logger;
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="options">検索オプション</param>
+        /// <param name="logger">ロガーインスタンス</param>
+        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="ArgumentException"></exception>
         internal FindCellWithFileListLogic(IFindCellOptions options, ILogger logger)
         {
             if (options.Mode != TargetMode.FileList)
@@ -25,9 +35,13 @@ namespace ExcelCellFinder.Core.Logic.FindCell.Bulk
             }
 
             _originalOption = options;
-            Logger = logger;
+            _logger = logger;
         }
 
+        /// <summary>
+        /// セル検索処理
+        /// </summary>
+        /// <returns>検索結果</returns>
         public IResult FindCell()
         {
             if (_originalOption.TargetFileInfos == null)
@@ -47,7 +61,7 @@ namespace ExcelCellFinder.Core.Logic.FindCell.Bulk
             foreach (var file in files)
             {
                 optionForFindCellInFile.TargetFileInfo = file;
-                var logic = FindCellLogicFactory.GetLogic(optionForFindCellInFile, Logger);
+                var logic = FindCellLogicFactory.GetLogic(optionForFindCellInFile, _logger);
                 var findResult = logic.FindCell();
 
                 wholeResult = wholeResult.Merge(findResult);
