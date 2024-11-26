@@ -16,10 +16,15 @@ if(Test-Path $createShortcutTo) {
 	Remove-Item $createShortcutTo
 }
 
-$shortcut = (New-Object -ComObject WScript.Shell).CreateShortcut($createShortcutTo)
-$shortcut.TargetPath = $exePath
-$shortcut.IconLocation = $exePath
-
-$shortcut.Save()
-
-Write-Host "Shortcut is created Successfully!"
+# ショートカットを作成するパスに移動して相対パスを処理
+Push-Location ([System.IO.Path]::GetDirectoryName($publishPath))
+    $TargetPathRelative = Resolve-Path $exePath -Relative
+    echo $TargetPathRelative
+    
+    $shortcut = (New-Object -ComObject WScript.Shell).CreateShortcut($createShortcutTo)
+    $shortcut.TargetPath = '%windir%\explorer.exe'
+    $shortcut.Arguments = "$TargetPathRelative"
+    $shortcut.IconLocation = $exePath
+    Write-Output $shortcut.IconLocation
+    $shortcut.Save()
+Pop-Location

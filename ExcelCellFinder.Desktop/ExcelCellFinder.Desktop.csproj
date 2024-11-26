@@ -44,10 +44,6 @@
 		</FluentValidationExcludedCultures>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Scripts\" />
-	</ItemGroup>
-
 	<Target Name="Cleanup" BeforeTargets="Build" Condition="'$(Configuration)' == 'Release'">
 		<PropertyGroup>
 			<CleanupDir>$([System.IO.Path]::GetDirectoryName($(PublishDir)))</CleanupDir>
