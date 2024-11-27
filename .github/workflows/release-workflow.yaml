@@ -1,18 +1,22 @@
-name: Build and Release ExcelCellFinder
-
-env:
-    TRIGGER_BRANCH: 'test-release' # テスト時は'test-release'に変更    
+name: Build and Release ExcelCellFinder 
 
 on:
     push:
         branches:
-            - ${{ env.TRIGGER_BRANCH }}/*
+            - test-release/*
+            - release/* 
+    workflow_dispatch:
 
 jobs:
     build:
         runs-on: windows-latest
         
         steps:
+    
+            - name: Debug TRIGGER_BRANCH value
+              run: echo "TRIGGER_BRANCH is ${{ env.TRIGGER_BRANCH }}"
+
+
             # リポジトリをチェックアウト
             - name: Checkout
               uses: actions/checkout@v3
@@ -26,7 +30,15 @@ jobs:
             # バージョン番号を抽出
             - name: Extract version from branch name
               id: extract_version
-              run: echo "VERSION=${GITHUB_REF#refs/heads/${{ env.TRIGGER_BRANCH }}/}" >> $GITHUB_ENV
+              shell: bash
+              run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV # ブランチ名の最後のスラッシュ以降（バージョン名）を取得
+
+            # バージョン番号確認
+            - name: Check VERSION
+              shell: bash
+              run: |
+                  echo "GITHUB_REF=$GITHUB_REF"
+                  echo "VERSION=$VERSION"
 
             # ビルド
             - name: Publish ExcelCellFinder.Desktop
@@ -41,7 +53,8 @@ jobs:
 
             # リリースアセットの作成チェック
             - name: Check Output
-              run: dir /s .tmp/Release.zip
+              run: dir /s .tmp\Release.zip
+              shell: cmd
 
             # GitHub Release 作成
             - name: Create Release
@@ -52,14 +65,16 @@ jobs:
               with:
                 tag_name: ${{ env.VERSION }}
                 release_name: Release ${{ env.VERSION }}
-                draft: false
+                draft: ${{ startsWith(github.ref, 'refs/heads/test-release/') }}  # test-release/* の場合true
                 prerelease: false
 
             # リリースアセットをアップロード
             - name: Upload Release Asset
               uses: actions/upload-release-asset@v1
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
                 upload_url: ${{ steps.create_release.outputs.upload_url }}
                 asset_path: .tmp/Release.zip
-                asset_name: ExcelCellFinder.exe
-                asset_content_type: application/octet-stream
+                asset_name: ExcelCellFinder.zip
+                asset_content_type: application/zip

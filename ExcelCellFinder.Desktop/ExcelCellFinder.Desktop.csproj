@@ -83,7 +83,7 @@
 		</PropertyGroup>
 		<Message Text="Create zip from: $(ZipTargetDir)" />
 		<Message Text="To Zip File: $(ZipFilePath)" />
-		<Exec Command="powershell -Command &quot;Compress-Archive -Path '$(ZipTargetDir)*' -DestinationPath '$(ZipFilePath)' -Force&quot;" />
+		<Exec Command="powershell -Command &quot;Compress-Archive -Path '$(ZipTargetDir)\*' -DestinationPath '$(ZipFilePath)' -Force&quot;" />
 		<Message Text="====== Create Artifact Zip END ======"></Message>
 	</Target>
 
