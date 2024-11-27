@@ -35,6 +35,7 @@ jobs:
 
             # バージョン番号確認
             - name: Check VERSION
+              shell: bash
               run: |
                   echo "GITHUB_REF=$GITHUB_REF"
                   echo "VERSION=$VERSION"
