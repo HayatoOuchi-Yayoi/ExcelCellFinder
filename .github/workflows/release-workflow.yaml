@@ -1,0 +1,65 @@
+name: Build and Release ExcelCellFinder
+
+env:
+    TRIGGER_BRANCH: 'test-release' # テスト時は'test-release'に変更    
+
+on:
+    push:
+        branches:
+            - ${{ env.TRIGGER_BRANCH }}/*
+
+jobs:
+    build:
+        runs-on: windows-latest
+        
+        steps:
+            # リポジトリをチェックアウト
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            # .NET Core SDK をインストール
+            - name: Setup .NET Core
+              uses: actions/setup-dotnet@v3
+              with:
+                  dotnet-version: 8.0.111
+
+            # バージョン番号を抽出
+            - name: Extract version from branch name
+              id: extract_version
+              run: echo "VERSION=${GITHUB_REF#refs/heads/${{ env.TRIGGER_BRANCH }}/}" >> $GITHUB_ENV
+
+            # ビルド
+            - name: Publish ExcelCellFinder.Desktop
+              run: |
+                  # プロジェクトフォルダに移動
+                  cd ./ExcelCellFinder.Desktop
+
+                  dotnet publish -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -o ../.tmp/Release/bin
+
+                  # 元のフォルダに戻る
+                  cd ../
+
+            # リリースアセットの作成チェック
+            - name: Check Output
+              run: dir /s .tmp/Release.zip
+
+            # GitHub Release 作成
+            - name: Create Release
+              id: create_release
+              uses: actions/create-release@v1
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                tag_name: ${{ env.VERSION }}
+                release_name: Release ${{ env.VERSION }}
+                draft: false
+                prerelease: false
+
+            # リリースアセットをアップロード
+            - name: Upload Release Asset
+              uses: actions/upload-release-asset@v1
+              with:
+                upload_url: ${{ steps.create_release.outputs.upload_url }}
+                asset_path: .tmp/Release.zip
+                asset_name: ExcelCellFinder.exe
+                asset_content_type: application/octet-stream
