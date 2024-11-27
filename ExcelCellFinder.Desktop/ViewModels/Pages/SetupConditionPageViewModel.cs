@@ -14,8 +14,14 @@ using System.Windows;
 
 namespace ExcelCellFinder.Desktop.ViewModels.Pages
 {
+    /// <summary>
+    /// 検索条件設定画面のViewModel
+    /// </summary>
     public partial class SetupConditionPageViewModel : PageViewModelBase
     {
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public SetupConditionPageViewModel()
         {
             PageTitle = "条件設定";
@@ -27,30 +33,56 @@ namespace ExcelCellFinder.Desktop.ViewModels.Pages
         private static readonly string BUTTON_CONTENT_DIRECTORY = "フォルダを選択";
         private static readonly string BUTTON_CONTENT_SPECIFIC_FILE = "ファイルを選択";
 
+        /// <summary>
+        /// 検索対象パス
+        /// </summary>
         [ObservableProperty]
         private string _findFolderPath;
 
+        /// <summary>
+        /// サブフォルダ検索フラグ
+        /// </summary>
         [ObservableProperty]
         private bool _isRecursively = true;
 
+        /// <summary>
+        /// 除外対象フォルダ正規表現
+        /// </summary>
         [ObservableProperty]
         private string _excludeDirectoryRegex = "";
 
+        /// <summary>
+        /// CSVファイルで指定フラグ
+        /// </summary>
         [ObservableProperty]
         private bool _isUseFileListCsv;
 
+        /// <summary>
+        /// フォルダを指定フラグ
+        /// </summary>
         [ObservableProperty]
         private bool _isProcessDirectory;
 
+        /// <summary>
+        /// ファイルを指定フラグ
+        /// </summary>
         [ObservableProperty]
         private bool _isSpecificFile;
 
+        /// <summary>
+        /// ファイル選択ボタンの表示内容
+        /// </summary>
         [ObservableProperty]
         private string _openSelectPathButtonContent = BUTTON_CONTENT_CSV;
 
+        /// <summary>
+        /// 検索対象ファイル選択方法プルダウン選択肢
+        /// </summary>
         public static IEnumerable<TargetFileSelectionType> TargetFileSelectionTypes => Enum.GetValues<TargetFileSelectionType>();
 
-        private TargetFileSelectionType _selectedTargetFileSelectionType = TargetFileSelectionType.CSVファイルで指定;
+        /// <summary>
+        /// 検索対象ファイル選択方法プルダウン選択値
+        /// </summary>
         public TargetFileSelectionType SelectedTargetFileSelectionType
         {
             get { return _selectedTargetFileSelectionType; }
@@ -78,7 +110,11 @@ namespace ExcelCellFinder.Desktop.ViewModels.Pages
                 }
             }
         }
+        private TargetFileSelectionType _selectedTargetFileSelectionType = TargetFileSelectionType.CSVファイルで指定;
 
+        /// <summary>
+        /// 検索対象パスを設定する
+        /// </summary>
         [RelayCommand]
         private void SelectPath()
         {
@@ -117,6 +153,9 @@ namespace ExcelCellFinder.Desktop.ViewModels.Pages
             }
         }
 
+        /// <summary>
+        /// セル検索処理を実行する
+        /// </summary>
         [RelayCommand]
         private void ExecuteSearch()
         {

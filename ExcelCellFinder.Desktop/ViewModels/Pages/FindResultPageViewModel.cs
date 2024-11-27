@@ -12,16 +12,26 @@ using System.Windows;
 
 namespace ExcelCellFinder.Desktop.ViewModels.Pages
 {
+    /// <summary>
+    /// 検索結果画面のViewModel
+    /// </summary>
     public partial class FindResultPageViewModel : PageViewModelBase
     {
         private readonly SetupConditionPageViewModel _originViewModel;
 
         private readonly IResult _findCellResult;
 
+        /// <summary>
+        /// 検索結果のグリッドデータ
+        /// </summary>
         [ObservableProperty]
         private ObservableCollection<FindResultGridItem> _findResultGridData;
 
-
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="findCellResult">セル検索結果</param>
+        /// <param name="origin">遷移元の検索条件設定画面ViewModel</param>
         public FindResultPageViewModel(IResult findCellResult, SetupConditionPageViewModel origin)
         {
             PageTitle = "検索結果";
@@ -31,12 +41,18 @@ namespace ExcelCellFinder.Desktop.ViewModels.Pages
             _findResultGridData = ConvertResultToGridData(findCellResult);
         }
 
+        /// <summary>
+        /// 検索条件設定画面に戻る
+        /// </summary>
         [RelayCommand]
         private void ReturnToSetupCondition()
         {
             RoutingService.Instance.MoveTo(_originViewModel);
         }
 
+        /// <summary>
+        /// 検索結果を保存する
+        /// </summary>
         [RelayCommand]
         private void SaveResult()
         {

@@ -7,13 +7,23 @@ using Microsoft.Extensions.Logging;
 
 namespace ExcelCellFinder.Core.Logic.FindCell
 {
+    /// <summary>
+    /// セル検索ロジック
+    /// </summary>
     internal class FindCellWithSingleFileLogic : IFindCellLogic
     {
         private readonly IFindCellOptions _originalOptions;
         private readonly string _path;
 
-        public ILogger Logger { get; set; }
+        private readonly ILogger _logger;
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="options">検索オプション</param>
+        /// <param name="logger">ロガーインスタンス</param>
+        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="ArgumentException"></exception>
         internal FindCellWithSingleFileLogic(IFindCellOptions options, ILogger logger)
         {
             if (options.Mode != TargetMode.File)
@@ -29,22 +39,26 @@ namespace ExcelCellFinder.Core.Logic.FindCell
             this._originalOptions = options;
             this._path = options.TargetFileInfo.FullName;
 
-            Logger = logger;
+            _logger = logger;
         }
 
+        /// <summary>
+        /// セル検索処理
+        /// </summary>
+        /// <returns>検索結果</returns>
         public IResult FindCell()
         {
             // Excelファイルを開く
             using var fs = new FileStream(this._path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             using var workbook = new XLWorkbook(fs);
-            Logger.LogInformation("Open Excel File: {FilePath}", this._path);
+            _logger.LogInformation("Open Excel File: {FilePath}", this._path);
 
             workbook.CalculateMode = XLCalculateMode.Manual;
 
             var foundCells = new List<(IXLCell, Exception?)>();
             foreach (var sheet in workbook.Worksheets.Where(x => x.Visibility == XLWorksheetVisibility.Visible))
             {
-                Logger.LogInformation("Open Excel Sheet: {SheetName}", sheet.Name);
+                _logger.LogInformation("Open Excel Sheet: {SheetName}", sheet.Name);
 
                 if (this._originalOptions.TargetCellTypes.Contains(TargetCellType.RedColor)
                     && this._originalOptions.TargetCellTypes.Contains(TargetCellType.StrikeLine))
@@ -70,17 +84,18 @@ namespace ExcelCellFinder.Core.Logic.FindCell
 
             return result;
         }
-        public IEnumerable<(IXLCell, Exception?)> GetCellsWithRedFontOrStrikethrough(IXLWorksheet worksheet)
+
+        private List<(IXLCell, Exception?)> GetCellsWithRedFontOrStrikethrough(IXLWorksheet worksheet)
         {
             var cells = new List<(IXLCell, Exception?)>();
             var notOperatableCellAddresses = new List<IXLAddress>();
 
-            Logger.LogInformation("Used Cell Count: {CellCount}", worksheet.CellsUsed().Count());
+            _logger.LogInformation("Used Cell Count: {CellCount}", worksheet.CellsUsed().Count());
 
             foreach (IXLCell cell in worksheet.CellsUsed())
             {
 
-                Logger.LogDebug("Cell: {CellAddress}", cell.Address.ToString());
+                _logger.LogDebug("Cell: {CellAddress}", cell.Address.ToString());
 
                 if (cell.HasRichText == false) continue;
 
