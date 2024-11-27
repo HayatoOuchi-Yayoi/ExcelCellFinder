@@ -17,7 +17,7 @@ if(Test-Path $createShortcutTo) {
 }
 
 # ショートカットを作成するパスに移動して相対パスを処理
-Push-Location ([System.IO.Path]::GetDirectoryName($publishPath))
+Push-Location ([System.IO.Path]::GetDirectoryName($createShortcutTo))
     $TargetPathRelative = Resolve-Path $exePath -Relative
     echo $TargetPathRelative
     
@@ -25,6 +25,5 @@ Push-Location ([System.IO.Path]::GetDirectoryName($publishPath))
     $shortcut.TargetPath = '%windir%\explorer.exe'
     $shortcut.Arguments = "$TargetPathRelative"
     $shortcut.IconLocation = $exePath
-    Write-Output $shortcut.IconLocation
     $shortcut.Save()
 Pop-Location

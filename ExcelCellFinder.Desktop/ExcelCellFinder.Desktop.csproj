@@ -38,53 +38,43 @@
     </None>
   </ItemGroup>
 
-	<ItemGroup>
-		<FluentValidationExcludedCultures Include="af-ZA;am-ET;ar-SA;az-Latn-AZ;be-BY;bg-BG;bn-BD;bs-Latn-BA;ca-ES;cs-CZ;da-DK;de-DE;el-GR;en-GB;es-ES;es-MX;et-EE;eu-ES;fa-IR;fi-FI;fr-CA;fr-FR;gl-ES;he-IL;hi-IN;hr-HR;hu-HU;id-ID;is-IS;it-IT;ka-GE;kk-KZ;km-KH;kn-IN;ko-KR;lo-LA;lt-LT;lv-LV;mk-MK;ml-IN;ms-MY;nb-NO;nl-NL;nn-NO;pl-PL;pt-BR;pt-PT;ro-RO;ru-RU;sk-SK;sl-SI;sq-AL;sr-Latn-RS;sv-SE;sw-KE;ta-IN;te-IN;th-TH;tr-TR;uk-UA;uz-Latn-UZ;vi-VN;">
-			<InProject>false</InProject>
-		</FluentValidationExcludedCultures>
-	</ItemGroup>
-
 	<Target Name="Cleanup" BeforeTargets="Build" Condition="'$(Configuration)' == 'Release'">
 		<PropertyGroup>
 			<CleanupDir>$([System.IO.Path]::GetDirectoryName($(PublishDir)))</CleanupDir>
 		</PropertyGroup>
-		<Message Text="====== Cleanup Publish Folder START ======"></Message>
+		<Message Importance="high" Text="====== Cleanup Publish Folder START ======"></Message>
 		<Exec Command="rd /s /q &quot;$(CleanupDir)&quot;" />
-		<Message Text="====== Cleanup Publish Folder END ======"></Message>
+		<Message Importance="high" Text="====== Cleanup Publish Folder END ======"></Message>
 	</Target>
 
-	<!--<Target Name="AfterBuildCustom" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
-		<Message Text="=== CustomAfterBuild Process started ===" Importance="high" />
+	<Target Name="CopyIcon" AfterTargets="Publish">
 		<PropertyGroup>
-			<OutputDir>$(SolutionDir)Release</OutputDir>
-			<ZipFile>$(OutputDir)\release.zip</ZipFile>
+			<IconDir>$([System.IO.Path]::GetDirectoryName($([System.IO.Path]::GetDirectoryName($(PublishDir)))))\icons</IconDir>
 		</PropertyGroup>
-		<Exec Command="powershell -Command &quot; if (Test-Path $(OutputDir)) { Remove-Item -Path $(OutputDir) -Recurse -Force } &quot;" />
-		<Exec Command="powershell -Command &quot; New-Item -ItemType Directory -Force -Path $(OutputDir) &quot;" />         
-		<Message Text="Directory created: $(OutputDir)" Importance="high" />
-		<Exec Command="powershell -Command &quot;Compress-Archive -Path '$(OutputPath)*' -DestinationPath '$(ZipFile)'&quot;" />
-		<Message Text="Zip file created at: $(ZipFile)" Importance="high" />
-		<Message Text="=== AfterBuild completed ===" Importance="high" />
-	</Target>-->
+		<Message Importance="high" Text="====== Copy Icon START ======"></Message>
+		<Message Importance="high" Text="Copy Icon to: $(IconDir)" />
+		<Copy SourceFiles="ExcelCellFinder.ico" DestinationFolder="$(IconDir)"></Copy>
+		<Message Importance="high" Text="====== Copy Icon END ======"></Message>
+	</Target>
 	
-	<Target Name="CreateShortcut" AfterTargets="Publish">
-		<Message Text="====== Create Shortcut START ======"></Message>
+	<Target Name="CreateShortcut" AfterTargets="CopyIcon">
+		<Message Importance="high" Text="====== Create Shortcut START ======"></Message>
 		<Exec Command="powershell.exe -ExecutionPolicy Bypass -File &quot;$(ProjectDir)\Scripts\CreateShortcut.ps1&quot; &quot;$(PublishDir)\ExcelCellFinder.Desktop.exe&quot;" />
-		<Message Text="====== Create Shortcut END ======"></Message>
+		<Message Importance="high" Text="====== Create Shortcut END ======"></Message>
 	</Target>
 
 	<Target Name="CreateArtifactZip" AfterTargets="CreateShortcut" >
-		<Message Text="====== Create Artifact Zip START ======"></Message>
 		<PropertyGroup>
 			<ZipTargetDir>$([System.IO.Path]::GetDirectoryName($([System.IO.Path]::GetDirectoryName($(PublishDir)))))</ZipTargetDir>
 			<ZipOutputDir>$([System.IO.Path]::GetDirectoryName($(ZipTargetDir)))</ZipOutputDir>
 			<ZipFileName>$([System.IO.Path]::GetFileName($(ZipTargetDir)))</ZipFileName>
 			<ZipFilePath>$([System.IO.Path]::Combine($(ZipOutputDir), $(ZipFileName))).zip</ZipFilePath>
 		</PropertyGroup>
+		<Message Importance="high" Text="====== Create Artifact Zip START ======"></Message>
 		<Message Text="Create zip from: $(ZipTargetDir)" />
 		<Message Text="To Zip File: $(ZipFilePath)" />
 		<Exec Command="powershell -Command &quot;Compress-Archive -Path '$(ZipTargetDir)\*' -DestinationPath '$(ZipFilePath)' -Force&quot;" />
-		<Message Text="====== Create Artifact Zip END ======"></Message>
+		<Message Importance="high" Text="====== Create Artifact Zip END ======"></Message>
 	</Target>
 
 </Project>
