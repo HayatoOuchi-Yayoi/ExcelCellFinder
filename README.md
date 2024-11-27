@@ -4,16 +4,20 @@ Excelファイル内のセルを検索するツールです。
 デスクトップアプリケーションとしてWindows上で動作します。
 ## 環境
 - Windows
-	- Windows 11 で動作確認しています。
-- Visual Studio 2022
-## ビルド
-Visaul Studio でRelease構成でビルドしてください。
+	- Windows 11 で動作確認しています
+
 ## インストール
-Release/release.zipを解凍して、任意のフォルダに配置してください。
+https://github.com/HayatoOuchi-Yayoi/ExcelCellFinder/releases
+こちらから最新のリリースをダウンロードして解凍してください。
+
 ## 使い方
-ExcelCellFinder.Desktop.exeを実行します。
+解凍したフォルダにあるExcelCellFinderから起動できます。
 
 ![launch](images/launch.gif)
+
+検索条件を設定して検索を実行します。
+
+![search](images/search.gif)
 
 ### 検索対象ファイル
 検索対象ファイルは3つの方法で指定できます。

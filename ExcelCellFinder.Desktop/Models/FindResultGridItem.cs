@@ -1,5 +1,8 @@
 ﻿namespace ExcelCellFinder.Desktop.Models
 {
+    /// <summary>
+    /// 検索結果一覧グリッドアイテム
+    /// </summary>
     public partial class FindResultGridItem
     {
         public string ファイル { get; set; } = "";

@@ -4,8 +4,16 @@ using Microsoft.Extensions.Logging;
 
 namespace ExcelCellFinder.Core.Logic.FindCell
 {
+    /// <summary>
+    /// セル検索ロジックファクトリ
+    /// </summary>
     public class FindCellLogicFactory()
     {
+        /// <summary>
+        /// セル検索ロジック取得
+        /// </summary>
+        /// <param name="options">検索オプション</param>
+        /// <returns>オプションに応じたセル検索ロジックインスタンス</returns>
         public static IFindCellLogic GetLogic(IFindCellOptions options)
         {
             using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddDebug());
@@ -14,6 +22,12 @@ namespace ExcelCellFinder.Core.Logic.FindCell
             return GetLogic(options, logger);
         }
 
+        /// <summary>
+        /// セル検索ロジック取得
+        /// </summary>
+        /// <param name="options">検索オプション</param>
+        /// <param name="logger">ロガーインスタンス</param>
+        /// <returns>オプションに応じたセル検索ロジックインスタンス</returns>
         public static IFindCellLogic GetLogic(IFindCellOptions options, ILogger logger)
         {
             if (options.Mode == TargetMode.File)
