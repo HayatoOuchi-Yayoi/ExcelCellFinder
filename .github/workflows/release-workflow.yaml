@@ -6,7 +6,8 @@ env:
 on:
     push:
         branches:
-            - ${{ env.TRIGGER_BRANCH }}/*
+            - test-release/*
+    workflow_dispatch:
 
 jobs:
     build:
