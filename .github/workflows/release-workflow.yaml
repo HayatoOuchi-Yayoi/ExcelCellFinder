@@ -45,7 +45,7 @@ jobs:
 
             # リリースアセットの作成チェック
             - name: Check Output
-              run: dir /s .tmp/Release.zip
+              run: dir /s .tmp\Release.zip
               shell: cmd
 
             # GitHub Release 作成
