@@ -30,7 +30,14 @@ jobs:
             # バージョン番号を抽出
             - name: Extract version from branch name
               id: extract_version
+              shell: bash
               run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV # ブランチ名の最後のスラッシュ以降（バージョン名）を取得
+
+            # バージョン番号確認
+            - name: Check VERSION
+              run: |
+                  echo "GITHUB_REF=$GITHUB_REF"
+                  echo "VERSION=$VERSION"
 
             # ビルド
             - name: Publish ExcelCellFinder.Desktop
