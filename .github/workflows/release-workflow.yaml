@@ -1,12 +1,10 @@
-name: Build and Release ExcelCellFinder
-
-env:
-    TRIGGER_BRANCH: 'test-release' # テスト時は'test-release'に変更    
+name: Build and Release ExcelCellFinder 
 
 on:
     push:
         branches:
             - test-release/*
+            - release/* 
     workflow_dispatch:
 
 jobs:
@@ -32,7 +30,7 @@ jobs:
             # バージョン番号を抽出
             - name: Extract version from branch name
               id: extract_version
-              run: echo "VERSION=${GITHUB_REF#refs/heads/${{ env.TRIGGER_BRANCH }}/}" >> $GITHUB_ENV
+              run: echo "VERSION=${GITHUB_REF#refs/heads/${{ github.event.ref }}/*}" >> $GITHUB_ENV
 
             # ビルド
             - name: Publish ExcelCellFinder.Desktop
@@ -58,7 +56,7 @@ jobs:
               with:
                 tag_name: ${{ env.VERSION }}
                 release_name: Release ${{ env.VERSION }}
-                draft: false
+                draft: ${{ startsWith(github.ref, 'refs/heads/test-release/') }}  # test-release/* の場合true
                 prerelease: false
 
             # リリースアセットをアップロード
