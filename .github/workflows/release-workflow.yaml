@@ -65,8 +65,14 @@ jobs:
               with:
                 tag_name: ${{ env.VERSION }}
                 release_name: Release ${{ env.VERSION }}
-                draft: ${{ startsWith(github.ref, 'refs/heads/test-release/') }}  # test-release/* の場合true
+                draft: true # 常にドラフトとして作成（公開はRelaseページから手動で行う）
                 prerelease: false
+                body: |
+                  ### New Features
+                  - 機能追加内容について記載してください
+                  ### Bug Fix
+                  - バグ修正内容について記載してください
+                  
 
             # リリースアセットをアップロード
             - name: Upload Release Asset
