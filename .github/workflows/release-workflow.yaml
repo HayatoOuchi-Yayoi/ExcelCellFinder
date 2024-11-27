@@ -30,7 +30,7 @@ jobs:
             # バージョン番号を抽出
             - name: Extract version from branch name
               id: extract_version
-              run: echo "VERSION=${GITHUB_REF#refs/heads/${{ github.event.ref }}/*}" >> $GITHUB_ENV
+              run: echo "VERSION=${GITHUB_REF#refs/heads/${{ github.event.ref }}/}" >> $GITHUB_ENV
 
             # ビルド
             - name: Publish ExcelCellFinder.Desktop
@@ -46,6 +46,7 @@ jobs:
             # リリースアセットの作成チェック
             - name: Check Output
               run: dir /s .tmp/Release.zip
+              shell: cmd
 
             # GitHub Release 作成
             - name: Create Release
