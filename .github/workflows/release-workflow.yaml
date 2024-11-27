@@ -70,7 +70,7 @@ jobs:
                 body: |
                   ### New Features
                   - 機能追加内容について記載してください
-                  ### Big Fix
+                  ### Bug Fix
                   - バグ修正内容について記載してください
                   
 
