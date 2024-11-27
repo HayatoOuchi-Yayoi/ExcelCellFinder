@@ -6,7 +6,7 @@ env:
 on:
     push:
         branches:
-            - ${{ env.TRIGGER_BRANCH }}/*
+            - test-release/*
     workflow_dispatch:
 
 jobs:
@@ -14,6 +14,11 @@ jobs:
         runs-on: windows-latest
         
         steps:
+    
+            - name: Debug TRIGGER_BRANCH value
+              run: echo "TRIGGER_BRANCH is ${{ env.TRIGGER_BRANCH }}"
+
+
             # リポジトリをチェックアウト
             - name: Checkout
               uses: actions/checkout@v3
