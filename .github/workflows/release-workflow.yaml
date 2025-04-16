@@ -1,0 +1,86 @@
+name: Build and Release ExcelCellFinder 
+
+on:
+    push:
+        branches:
+            - test-release/*
+            - release/* 
+    workflow_dispatch:
+
+jobs:
+    build:
+        runs-on: windows-latest
+        
+        steps:
+    
+            - name: Debug TRIGGER_BRANCH value
+              run: echo "TRIGGER_BRANCH is ${{ env.TRIGGER_BRANCH }}"
+
+
+            # リポジトリをチェックアウト
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            # .NET Core SDK をインストール
+            - name: Setup .NET Core
+              uses: actions/setup-dotnet@v3
+              with:
+                  dotnet-version: 8.0.111
+
+            # バージョン番号を抽出
+            - name: Extract version from branch name
+              id: extract_version
+              shell: bash
+              run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV # ブランチ名の最後のスラッシュ以降（バージョン名）を取得
+
+            # バージョン番号確認
+            - name: Check VERSION
+              shell: bash
+              run: |
+                  echo "GITHUB_REF=$GITHUB_REF"
+                  echo "VERSION=$VERSION"
+
+            # ビルド
+            - name: Publish ExcelCellFinder.Desktop
+              run: |
+                  # プロジェクトフォルダに移動
+                  cd ./ExcelCellFinder.Desktop
+
+                  dotnet publish -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -o ../.tmp/Release/bin
+
+                  # 元のフォルダに戻る
+                  cd ../
+
+            # リリースアセットの作成チェック
+            - name: Check Output
+              run: dir /s .tmp\Release.zip
+              shell: cmd
+
+            # GitHub Release 作成
+            - name: Create Release
+              id: create_release
+              uses: actions/create-release@v1
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                tag_name: ${{ env.VERSION }}
+                release_name: Release ${{ env.VERSION }}
+                draft: true # 常にドラフトとして作成（公開はRelaseページから手動で行う）
+                prerelease: false
+                body: |
+                  ### New Features
+                  - 機能追加内容について記載してください
+                  ### Bug Fix
+                  - バグ修正内容について記載してください
+                  
+
+            # リリースアセットをアップロード
+            - name: Upload Release Asset
+              uses: actions/upload-release-asset@v1
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                upload_url: ${{ steps.create_release.outputs.upload_url }}
+                asset_path: .tmp/Release.zip
+                asset_name: ExcelCellFinder.zip
+                asset_content_type: application/zip

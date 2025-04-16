@@ -9,6 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExcelCellFinder.Desktop", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目", "ソリューション項目", "{36928DF9-8E5A-49D6-8E4C-BB6A98759439}"
 	ProjectSection(SolutionItems) = preProject
+		DEVELOPMENT.md = DEVELOPMENT.md
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
@@ -16,6 +17,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{C0B839C3-7AFF-429D-BBEE-716471391ED4}"
 	ProjectSection(SolutionItems) = preProject
 		images\launch.gif = images\launch.gif
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{9602C244-7D89-413D-BE32-95D06700AD97}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\release-workflow.yaml = .github\workflows\release-workflow.yaml
 	EndProjectSection
 EndProject
 Global
@@ -38,6 +44,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C0B839C3-7AFF-429D-BBEE-716471391ED4} = {36928DF9-8E5A-49D6-8E4C-BB6A98759439}
+		{9602C244-7D89-413D-BE32-95D06700AD97} = {36928DF9-8E5A-49D6-8E4C-BB6A98759439}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2BDC1912-12FA-4D92-ADE4-6646CB1D42F5}

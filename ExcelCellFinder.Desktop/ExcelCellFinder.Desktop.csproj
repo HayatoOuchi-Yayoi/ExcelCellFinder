@@ -38,4 +38,43 @@
     </None>
   </ItemGroup>
 
+	<Target Name="Cleanup" BeforeTargets="Build" Condition="'$(Configuration)' == 'Release'">
+		<PropertyGroup>
+			<CleanupDir>$([System.IO.Path]::GetDirectoryName($(PublishDir)))</CleanupDir>
+		</PropertyGroup>
+		<Message Importance="high" Text="====== Cleanup Publish Folder START ======"></Message>
+		<Exec Command="rd /s /q &quot;$(CleanupDir)&quot;" />
+		<Message Importance="high" Text="====== Cleanup Publish Folder END ======"></Message>
+	</Target>
+
+	<Target Name="CopyIcon" AfterTargets="Publish">
+		<PropertyGroup>
+			<IconDir>$([System.IO.Path]::GetDirectoryName($([System.IO.Path]::GetDirectoryName($(PublishDir)))))\icons</IconDir>
+		</PropertyGroup>
+		<Message Importance="high" Text="====== Copy Icon START ======"></Message>
+		<Message Importance="high" Text="Copy Icon to: $(IconDir)" />
+		<Copy SourceFiles="ExcelCellFinder.ico" DestinationFolder="$(IconDir)"></Copy>
+		<Message Importance="high" Text="====== Copy Icon END ======"></Message>
+	</Target>
+	
+	<Target Name="CreateShortcut" AfterTargets="CopyIcon">
+		<Message Importance="high" Text="====== Create Shortcut START ======"></Message>
+		<Exec Command="powershell.exe -ExecutionPolicy Bypass -File &quot;$(ProjectDir)\Scripts\CreateShortcut.ps1&quot; &quot;$(PublishDir)\ExcelCellFinder.Desktop.exe&quot;" />
+		<Message Importance="high" Text="====== Create Shortcut END ======"></Message>
+	</Target>
+
+	<Target Name="CreateArtifactZip" AfterTargets="CreateShortcut" >
+		<PropertyGroup>
+			<ZipTargetDir>$([System.IO.Path]::GetDirectoryName($([System.IO.Path]::GetDirectoryName($(PublishDir)))))</ZipTargetDir>
+			<ZipOutputDir>$([System.IO.Path]::GetDirectoryName($(ZipTargetDir)))</ZipOutputDir>
+			<ZipFileName>$([System.IO.Path]::GetFileName($(ZipTargetDir)))</ZipFileName>
+			<ZipFilePath>$([System.IO.Path]::Combine($(ZipOutputDir), $(ZipFileName))).zip</ZipFilePath>
+		</PropertyGroup>
+		<Message Importance="high" Text="====== Create Artifact Zip START ======"></Message>
+		<Message Text="Create zip from: $(ZipTargetDir)" />
+		<Message Text="To Zip File: $(ZipFilePath)" />
+		<Exec Command="powershell -Command &quot;Compress-Archive -Path '$(ZipTargetDir)\*' -DestinationPath '$(ZipFilePath)' -Force&quot;" />
+		<Message Importance="high" Text="====== Create Artifact Zip END ======"></Message>
+	</Target>
+
 </Project>
