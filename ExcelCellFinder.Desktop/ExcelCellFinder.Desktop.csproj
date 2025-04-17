@@ -64,7 +64,7 @@
 		<Message Importance="high" Text="====== Create Shortcut END ======"></Message>
 	</Target>-->
 
-	<Target Name="CreateArtifactZip" AfterTargets="CreateShortcut" >
+	<Target Name="CreateArtifactZip" AfterTargets="CopyIcon" >
 		<PropertyGroup>
 			<ZipTargetDir>$([System.IO.Path]::GetDirectoryName($([System.IO.Path]::GetDirectoryName($(PublishDir)))))</ZipTargetDir>
 			<ZipOutputDir>$([System.IO.Path]::GetDirectoryName($(ZipTargetDir)))</ZipOutputDir>
