@@ -56,12 +56,13 @@
 		<Copy SourceFiles="ExcelCellFinder.ico" DestinationFolder="$(IconDir)"></Copy>
 		<Message Importance="high" Text="====== Copy Icon END ======"></Message>
 	</Target>
-	
-	<Target Name="CreateShortcut" AfterTargets="CopyIcon">
+
+	<!-- ショートカットから実行すると、結果ファイル用のテンプレートが上手く読み込めない問題があるのでコメントアウト -->
+	<!--<Target Name="CreateShortcut" AfterTargets="CopyIcon">
 		<Message Importance="high" Text="====== Create Shortcut START ======"></Message>
 		<Exec Command="powershell.exe -ExecutionPolicy Bypass -File &quot;$(ProjectDir)\Scripts\CreateShortcut.ps1&quot; &quot;$(PublishDir)\ExcelCellFinder.Desktop.exe&quot;" />
 		<Message Importance="high" Text="====== Create Shortcut END ======"></Message>
-	</Target>
+	</Target>-->
 
 	<Target Name="CreateArtifactZip" AfterTargets="CreateShortcut" >
 		<PropertyGroup>
